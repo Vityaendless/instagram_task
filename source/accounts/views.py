@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import login, logout
 from .auth import EmailUsernameAuthentication as EUA
 
 
@@ -9,7 +9,6 @@ def login_view(request):
         login_data = request.POST.get('login_data')
         password = request.POST.get('password')
         user = EUA.authenticate(request, login_data, password)
-        # user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
             return redirect('accounts:login')
