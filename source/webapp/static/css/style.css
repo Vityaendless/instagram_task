@@ -15,3 +15,18 @@
     display: none;
   }
 }
+
+.user-logo {
+    width: 200px;
+    height: 200px;
+    overflow: hidden;
+    border-radius: 100%;
+}
+
+.user-logo .image {
+    position: relative;
+    weight: 200px;
+    height: 400px;
+    left: -30%;
+    top: -50%;
+}

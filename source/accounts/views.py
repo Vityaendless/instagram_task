@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth import login, logout
+from django.contrib.auth import login, logout, get_user_model
+from django.views.generic import DetailView
 from .auth import EmailUsernameAuthentication as EUA
 
 
@@ -16,6 +17,12 @@ def login_view(request):
             context['has_error'] = True
     return render(request, 'login.html', context=context)
 
+
 def logout_view(request):
     logout(request)
     return redirect('accounts:login')
+
+
+class UserView(DetailView):
+    model = get_user_model()
+    template_name = 'profile.html'

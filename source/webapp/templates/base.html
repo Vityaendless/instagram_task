@@ -23,9 +23,11 @@
                     <span class="menu-line me-2">|</span>
                     <span class="lobster-regular mt-1 me-2">Instagram</span>
                 </div>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
+                {% if request.user.is_authenticated %}
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                {% endif %}
                 <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                     <div class="navbar-nav w-100">
                         {% block menu %}
@@ -35,10 +37,10 @@
                 </div>
             </div>
         </nav>
+        {% if request.user.is_authenticated %}
+            <p>You entered as {{ request.user }}</p>
+        {% endif %}
         <div class="container roboto-thin">
-            {% if request.user.is_authenticated %}
-                <p>You entered as {{ request.user }}</p>
-            {% endif %}
             {% block content %}
             {% endblock %}
         </div>
