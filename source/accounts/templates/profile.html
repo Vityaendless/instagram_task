@@ -12,7 +12,7 @@
         <div class="col-12 col-md-8">
             <div class="d-flex justify-content-between">
                 <h1 class="display-6">{{ request.user.username }}</h1>
-                <a type="button" class="btn btn-light border border-black w-75 py-3 fw-bold">Edit profile</a>
+                <a type="button" class="btn btn-light border border-black w-75 py-3 fw-bold" href="{% url 'accounts:edit_profile' pk=request.user.pk %}">Edit profile</a>
             </div>
             <div class="d-flex justify-content-between mb-2">
                 <span class="me-1">{{ request.user.publications }} publications</span>

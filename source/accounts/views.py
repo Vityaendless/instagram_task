@@ -1,7 +1,11 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, logout, get_user_model
-from django.views.generic import DetailView
+from django.views.generic import DetailView, UpdateView
 from .auth import EmailUsernameAuthentication as EUA
+from .forms import UserForm
+
+
+User_model = get_user_model()
 
 
 def login_view(request):
@@ -24,5 +28,11 @@ def logout_view(request):
 
 
 class UserView(DetailView):
-    model = get_user_model()
+    model = User_model
     template_name = 'profile.html'
+
+
+class UserUpdateView(UpdateView):
+    template_name = 'edit_profile.html'
+    model = User_model
+    form_class = UserForm

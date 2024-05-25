@@ -1,0 +1,7 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Edit profile{% endblock %}
+{% block content %}
+    {% include 'partial/form.html' with value_submit='Edit profile' form_method='post' %}
+{% endblock %}
