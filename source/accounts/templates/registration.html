@@ -1,0 +1,8 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Registration{% endblock %}
+{% block content %}
+    <h1>Registration</h1>
+    <a type="button" class="btn btn-light border border-black w-75 py-3 fw-bold me-1 mb-1" href="{% url 'accounts:login' %}">Back to welcome page</a>
+    {% include 'partial/form.html' with value_submit='Registration' form_method='post' enctype='multipart/form-data' %}
+{% endblock %}

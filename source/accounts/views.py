@@ -1,6 +1,8 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, reverse
 from django.contrib.auth import login, logout, get_user_model
-from django.views.generic import DetailView, UpdateView
+from django.views.generic import DetailView, CreateView, UpdateView
+from django.contrib.auth.views import PasswordChangeView
+from django.contrib.auth.mixins import UserPassesTestMixin
 from .auth import EmailUsernameAuthentication as EUA
 from .forms import UserForm
 
@@ -30,9 +32,38 @@ def logout_view(request):
 class UserView(DetailView):
     model = User_model
     template_name = 'profile.html'
+    context_object_name = 'user_obj'
 
 
-class UserUpdateView(UpdateView):
+class RegisterView(CreateView):
+    model = get_user_model()
+    form_class = UserForm
+    template_name = 'registration.html'
+
+    def form_valid(self, form):
+        user = form.save()
+        login(self.request, user)
+        return redirect(self.get_success_url())
+
+    def get_success_url(self):
+        next_page = reverse('accounts:login')
+        return next_page
+
+
+class UserUpdateView(UserPassesTestMixin, UpdateView):
     template_name = 'edit_profile.html'
     model = User_model
     form_class = UserForm
+
+    def test_func(self):
+        return self.request.user.pk == self.kwargs.get('pk')
+
+
+class UserPasswordChangeView(UserPassesTestMixin, PasswordChangeView):
+    template_name = 'user_password_change.html'
+
+    def test_func(self):
+        return self.request.user.pk == self.kwargs.get('pk')
+
+    def get_success_url(self):
+        return reverse('accounts:profile', kwargs={'pk': self.request.user.pk})

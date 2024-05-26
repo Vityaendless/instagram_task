@@ -7,7 +7,7 @@ class UserForm(forms.ModelForm):
     class Meta:
         model = get_user_model()
         fields = (
-            'username', 'password', 'email',
-            'avatar', 'bio', 'first_name',
-            'last_name', 'phone', 'gender'
+            'username', 'email', 'avatar',
+            'bio', 'first_name', 'last_name',
+            'phone', 'gender'
         )

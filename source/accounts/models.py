@@ -1,4 +1,5 @@
 from django.db import models
+from django.shortcuts import reverse
 from django.contrib.auth.models import AbstractUser
 
 
@@ -6,7 +7,7 @@ gender_choices = [('m', 'Man'), ('w', 'Woman')]
 
 
 class AppUser(AbstractUser):
-    email = models.EmailField(max_length=30, null=False, blank=False, verbose_name="Email")
+    email = models.EmailField(max_length=30, unique=True, null=False, blank=False, verbose_name="Email")
     avatar = models.ImageField(upload_to='user_pics', verbose_name='Avatar')
     bio = models.TextField(max_length=3000, null=True, blank=True, verbose_name="Bio")
     phone = models.CharField(max_length=15, null=True, blank=True, verbose_name="Phone number")
@@ -27,3 +28,6 @@ class AppUser(AbstractUser):
 
     def __str__(self):
         return f'{self.first_name} {self.last_name}, username: {self.username}'
+
+    def get_absolute_url(self):
+        return reverse('accounts:profile', kwargs={'pk': self.pk})

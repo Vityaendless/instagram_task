@@ -3,22 +3,25 @@
 
 {% block title %}Log in{% endblock %}
 {% block content %}
-    <h1>Log in</h1>
-    <form action="{% url 'accounts:login' %}" method="POST">
-        {% csrf_token %}
-        {% if has_error %}
-            <p class="form-error">Wrong email/username or password</p>
-        {% endif %}
-        <div class="form-group">
-            <label for="login_data" class="form-label">Username/email:</label>
-            <input type="text" name="login_data" id="login_data">
-        </div>
-        <div class="form-group">
-            <label for="password" class="form-label">Password:</label>
-            <input type="password" name="password" id="password">
-        </div>
-        <button type="submit">Submit</button>
-    </form>
+    {% if not request.user.is_authenticated %}
+        <h1>Log in</h1>
+        <form class="mb-2" action="{% url 'accounts:login' %}" method="POST">
+            {% csrf_token %}
+            {% if has_error %}
+                <p class="form-error">Wrong email/username or password</p>
+            {% endif %}
+            <div class="form-group">
+                <label for="login_data" class="form-label">Username/email:</label>
+                <input type="text" name="login_data" id="login_data">
+            </div>
+            <div class="form-group">
+                <label for="password" class="form-label">Password:</label>
+                <input type="password" name="password" id="password">
+            </div>
+            <button type="submit">Submit</button>
+        </form>
+        <a type="button" class="btn btn-light border border-black w-75 py-3 fw-bold" href="{% url 'accounts:registration' %}">Create new...</a>
+    {% endif %}
     {% if request.user.is_authenticated %}
         <form id="logout-form" method="POST" action="{% url 'accounts:logout' %}?next={{ request.path }}">
             {% csrf_token %}

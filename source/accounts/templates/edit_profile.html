@@ -3,5 +3,6 @@
 
 {% block title %}Edit profile{% endblock %}
 {% block content %}
-    {% include 'partial/form.html' with value_submit='Edit profile' form_method='post' %}
+    <a type="button" class="btn btn-light border border-black w-75 py-3 fw-bold me-1 mb-1" href="{% url 'accounts:profile' pk=request.user.pk %}">Back to profile</a>
+    {% include 'partial/form.html' with value_submit='Edit profile' form_method='post' enctype='multipart/form-data' %}
 {% endblock %}

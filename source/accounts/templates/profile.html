@@ -6,21 +6,28 @@
     <div class="row">
         <div class="col-12 col-md-4 mb-1">
             <div class="user-logo">
-                <img class="image" src="{{ request.user.avatar.url }}">
+                {% if user_obj.avatar %}
+                    <img class="image" src="{{ user_obj.avatar.url }}">
+                {% else %}
+                    <span>No avatar</span>
+                {% endif %}
             </div>
         </div>
         <div class="col-12 col-md-8">
-            <div class="d-flex justify-content-between">
-                <h1 class="display-6">{{ request.user.username }}</h1>
-                <a type="button" class="btn btn-light border border-black w-75 py-3 fw-bold" href="{% url 'accounts:edit_profile' pk=request.user.pk %}">Edit profile</a>
+            <div class="d-flex justify-content-between mb-2">
+                <h1 class="display-6 me-1">{{ user_obj.username }}</h1>
+                {% if request.user.is_authenticated and request.user == user_obj %}
+                    <a type="button" class="btn btn-light border border-black w-75 py-3 fw-bold me-1" href="{% url 'accounts:edit_profile' pk=request.user.pk %}">Edit profile</a>
+                    <a type="button" class="btn btn-light border border-black w-75 py-3 fw-bold" href="{% url 'accounts:user_password_change' request.user.pk %}">Change password</a>
+                {% endif %}
             </div>
             <div class="d-flex justify-content-between mb-2">
-                <span class="me-1">{{ request.user.publications }} publications</span>
-                <span class="me-1">{{ request.user.subscriptions }} subscriptions</span>
-                <span>{{ request.user.subscribers }} subscribers</span>
+                <span class="me-1">{{ user_obj.publications }} publications</span>
+                <span class="me-1">{{ user_obj.subscriptions }} subscriptions</span>
+                <span>{{ user_obj.subscribers }} subscribers</span>
             </div>
-            <p class="fw-bold">{{ request.user.last_name }} {{ request.user.first_name }}</p>
-            <p>{{ request.user.bio }}</p>
+            <p class="fw-bold">{{ user_obj.last_name }} {{ user_obj.first_name }}</p>
+            <p>{{ user_obj.bio }}</p>
         </div>
     </div>
     <hr>
