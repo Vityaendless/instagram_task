@@ -1,11 +1,14 @@
 from django.shortcuts import render, redirect, reverse
 from django.contrib.auth import login, logout, get_user_model
-from django.views.generic import DetailView, CreateView, UpdateView
+from django.views.generic import DetailView, CreateView, UpdateView, ListView
 from django.contrib.auth.views import PasswordChangeView
 from django.contrib.auth.mixins import UserPassesTestMixin
+from django.db.models import Q
+from django.utils.http import urlencode
+
 from .auth import EmailUsernameAuthentication as EUA
 from .forms import UserForm
-from django.core.exceptions import PermissionDenied
+from instagram_task.source.webapp.forms import SearchForm
 
 
 User_model = get_user_model()
@@ -13,6 +16,7 @@ User_model = get_user_model()
 
 def login_view(request):
     context = {}
+    context['search_form'] = SearchForm(request.GET)
     if request.method == 'POST':
         login_data = request.POST.get('login_data')
         password = request.POST.get('password')
@@ -34,6 +38,11 @@ class UserView(DetailView):
     model = User_model
     template_name = 'profile.html'
     context_object_name = 'user_obj'
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(object_list=object_list, **kwargs)
+        context['search_form'] = SearchForm(self.request.GET)
+        return context
 
 
 class RegisterView(CreateView):
@@ -62,6 +71,11 @@ class UserUpdateView(UserPassesTestMixin, UpdateView):
     def handle_no_permission(self):
         return redirect('webapp:403')
 
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(object_list=object_list, **kwargs)
+        context['search_form'] = SearchForm(self.request.GET)
+        return context
+
 
 class UserPasswordChangeView(UserPassesTestMixin, PasswordChangeView):
     template_name = 'user_password_change.html'
@@ -74,3 +88,50 @@ class UserPasswordChangeView(UserPassesTestMixin, PasswordChangeView):
 
     def get_success_url(self):
         return reverse('accounts:profile', kwargs={'pk': self.request.user.pk})
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(object_list=object_list, **kwargs)
+        context['search_form'] = SearchForm(self.request.GET)
+        return context
+
+
+class SearchResultView(ListView):
+    model = User_model
+    template_name = 'users_list.html'
+    context_object_name = 'user_obj'
+    paginate_by = 10
+    paginate_orphans = 1
+    ordering = ('username',)
+
+    def get_search_form(self):
+        return SearchForm(self.request.GET)
+
+    def get_search_value(self):
+        if self.search_form.is_valid():
+            return self.search_form.cleaned_data['search']
+        return None
+
+    def dispatch(self, request, *args, **kwargs):
+        self.search_form = self.get_search_form()
+        self.search_value = self.get_search_value()
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        if self.search_value:
+            queryset = queryset.filter(
+                Q(username__icontains=self.search_value) |
+                Q(email__icontains=self.search_value) |
+                Q(first_name__icontains=self.search_value)
+            )
+        return queryset
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(object_list=object_list, **kwargs)
+        context['search_form'] = self.search_form
+        if self.search_value:
+            context['query'] = urlencode({'search': self.search_value})
+            context['search_value'] = self.search_value
+        return context
+
+    #detailview, searchview, profile - нужны пермишены
