@@ -2,6 +2,8 @@
 {% load static %}
 {% block subtitle %}Not access{% endblock %}
 {% block content %}
-    <h2>No access</h2>
-    <p>Click <a href="{% url 'account:login' %}">here</a> to back to main page</p>
-{% endblock %}
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <p>No access to this page</p>
+        <a href="{% url 'accounts:login' %}"><strong>Back to main page</strong></a>
+    </div>
+{% endblock content %}

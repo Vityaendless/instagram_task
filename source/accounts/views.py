@@ -5,6 +5,7 @@ from django.contrib.auth.views import PasswordChangeView
 from django.contrib.auth.mixins import UserPassesTestMixin
 from .auth import EmailUsernameAuthentication as EUA
 from .forms import UserForm
+from django.core.exceptions import PermissionDenied
 
 
 User_model = get_user_model()
@@ -58,12 +59,18 @@ class UserUpdateView(UserPassesTestMixin, UpdateView):
     def test_func(self):
         return self.request.user.pk == self.kwargs.get('pk')
 
+    def handle_no_permission(self):
+        return redirect('webapp:403')
+
 
 class UserPasswordChangeView(UserPassesTestMixin, PasswordChangeView):
     template_name = 'user_password_change.html'
 
     def test_func(self):
         return self.request.user.pk == self.kwargs.get('pk')
+
+    def handle_no_permission(self):
+        return redirect('webapp:403')
 
     def get_success_url(self):
         return reverse('accounts:profile', kwargs={'pk': self.request.user.pk})

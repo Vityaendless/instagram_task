@@ -1,3 +1,5 @@
 from django.shortcuts import render
 
-# Create your views here.
+
+def permission_denied(request):
+    return render(request, 'errors/403.html', status=403)
