@@ -2,7 +2,7 @@
 {% load static %}
 {% block subtitle %}Not access{% endblock %}
 {% block content %}
-    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+    <div class="alert alert-danger alert-dismissible fade show mt-2" role="alert">
         <p>No access to this page</p>
         <a href="{% url 'accounts:login' %}"><strong>Back to main page</strong></a>
     </div>

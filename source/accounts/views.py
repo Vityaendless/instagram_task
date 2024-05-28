@@ -39,6 +39,11 @@ class UserView(DetailView):
     template_name = 'profile.html'
     context_object_name = 'user_obj'
 
+    def dispatch(self, request, *args, **kwargs):
+        if not self.request.user.is_authenticated:
+            return redirect('webapp:403')
+        return super().dispatch(request, *args, **kwargs)
+
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(object_list=object_list, **kwargs)
         context['search_form'] = SearchForm(self.request.GET)
@@ -112,6 +117,8 @@ class SearchResultView(ListView):
         return None
 
     def dispatch(self, request, *args, **kwargs):
+        if not self.request.user.is_authenticated:
+            return redirect('webapp:403')
         self.search_form = self.get_search_form()
         self.search_value = self.get_search_value()
         return super().dispatch(request, *args, **kwargs)
@@ -133,5 +140,3 @@ class SearchResultView(ListView):
             context['query'] = urlencode({'search': self.search_value})
             context['search_value'] = self.search_value
         return context
-
-    #detailview, searchview, profile - нужны пермишены
