@@ -71,3 +71,16 @@
     text-align: center;
     border: solid 1px gray;
 }
+
+.publications .card {
+    height: 280px;
+    overflow: hidden;
+}
+
+.publications img {
+    position: relative;
+    weight: 100%;
+    height: auto;
+    left: 0%;
+    top: 0%;
+}

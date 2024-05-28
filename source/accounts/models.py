@@ -12,14 +12,14 @@ class AppUser(AbstractUser):
     bio = models.TextField(max_length=3000, null=True, blank=True, verbose_name="Bio")
     phone = models.CharField(max_length=15, null=True, blank=True, verbose_name="Phone number")
     gender = models.CharField(max_length=30, null=True, blank=True, verbose_name='Gender', choices=gender_choices)
-    publications = models.IntegerField(default=0, verbose_name='Publications')
+    publications_count = models.IntegerField(default=0, verbose_name='Publications')
     subscriptions = models.IntegerField(default=0, verbose_name='Subscriptions')
     subscribers = models.IntegerField(default=0, verbose_name='Subscribers')
 
     def increase_count(self, marker):
         match marker:
             case 'publications':
-                self.publications += 1
+                self.publications_count += 1
             case 'subscriptions':
                 self.subscriptions += 1
             case 'subscribers':

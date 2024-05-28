@@ -1,3 +1,12 @@
 from django.contrib import admin
+from .models import Publication
 
-# Register your models here.
+
+@admin.register(Publication)
+class PublicationAdmin(admin.ModelAdmin):
+    list_display = ['id', 'content', 'created_at']
+    list_display_links = ['id', 'content']
+    list_filter = ['content']
+    search_fields = ['content', 'author']
+    fields = ['content', 'author', 'img', 'likes', 'comments', 'created_at', 'updated_at']
+    readonly_fields = ['created_at', 'updated_at']

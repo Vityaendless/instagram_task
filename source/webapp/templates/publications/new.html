@@ -1,0 +1,8 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Add new publication{% endblock %}
+{% block content %}
+    <h1>New publication</h1>
+    {% include 'partial/form.html' with value_submit='Add publication' form_method='post' enctype='multipart/form-data' %}
+{% endblock %}
