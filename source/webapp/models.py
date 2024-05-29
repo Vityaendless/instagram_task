@@ -16,3 +16,14 @@ class Publication(AbstractModel):
     img = models.ImageField(upload_to='publications_images', verbose_name='Avatar')
     likes_count = models.IntegerField(default=0, verbose_name='Count of likes')
     comments_count = models.IntegerField(default=0, verbose_name='Count of comments')
+
+
+class Subscription(models.Model):
+    user = models.ForeignKey(
+        get_user_model(), related_name='user_subscribers',
+        on_delete=models.CASCADE, verbose_name='User'
+    )
+    subscriber = models.ForeignKey(
+        get_user_model(), related_name='subscriber_user',
+        on_delete=models.CASCADE, verbose_name='Subscriber'
+    )

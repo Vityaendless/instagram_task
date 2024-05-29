@@ -10,5 +10,6 @@ class UserAdmin(admin.ModelAdmin):
     fields = [
         'username', 'avatar', 'password', 'email',
         'first_name', 'last_name', 'bio', 'phone',
-        'gender', 'publications_count'
+        'gender', 'publications_count', 'subscriptions_count',
+        'subscribers_count'
     ]

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Publication
+from .models import Publication, Subscription
 
 
 @admin.register(Publication)
@@ -13,3 +13,10 @@ class PublicationAdmin(admin.ModelAdmin):
         'comments_count', 'updated_at', 'created_at'
     ]
     readonly_fields = ['created_at', 'updated_at']
+
+
+@admin.register(Subscription)
+class SubscriptionAdmin(admin.ModelAdmin):
+    list_display = ['id']
+    list_display_links = ['id']
+    fields = ['user', 'subscriber']

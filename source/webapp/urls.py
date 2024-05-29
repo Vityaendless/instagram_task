@@ -1,6 +1,6 @@
 from django.urls import path
 from django.views.generic.base import RedirectView
-from .views import permission_denied, PublicationCreateView, PublicationView
+from .views import permission_denied, PublicationCreateView, PublicationView, SubscriptionCreateView
 
 
 app_name = 'webapp'
@@ -10,4 +10,5 @@ urlpatterns = [
     path('403/', permission_denied, name='403'),
     path('profile/<int:pk>/new_publication/', PublicationCreateView.as_view(), name='new_publication'),
     path('profile/<int:pk>/details', PublicationView.as_view(), name='publication_details'),
+    path('subscription/<int:pk>/', SubscriptionCreateView.as_view(), name='subscription'),
 ]
