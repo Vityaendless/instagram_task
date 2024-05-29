@@ -8,5 +8,5 @@ app_name = 'webapp'
 urlpatterns = [
     path('', RedirectView.as_view(pattern_name='accounts:login'), name='index'),
     path('403/', permission_denied, name='403'),
-    path('new_publication/', PublicationCreateView.as_view(), name='new_publication'),
+    path('profile/<int:pk>/new_publication/', PublicationCreateView.as_view(), name='new_publication'),
 ]
