@@ -14,5 +14,5 @@ class Publication(AbstractModel):
     content = models.TextField(max_length=3000, null=False, blank=False, verbose_name="Content")
     author = models.ForeignKey(get_user_model(), related_name='publications', on_delete=models.CASCADE, verbose_name="Author")
     img = models.ImageField(upload_to='publications_images', verbose_name='Avatar')
-    likes = models.IntegerField(default=0, verbose_name='Count of likes')
-    comments = models.IntegerField(default=0, verbose_name='Count of comments')
+    likes_count = models.IntegerField(default=0, verbose_name='Count of likes')
+    comments_count = models.IntegerField(default=0, verbose_name='Count of comments')

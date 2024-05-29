@@ -1,6 +1,6 @@
 <div class="col mb-2">
     <div class="card">
-        <a href="#">
+        <a href="{% url 'webapp:publication_details' pk=publication.pk  %}">
             <img src="{{ publication.img.url }}" class="img-fluid" alt="photo{{ publication.pk }}">
         </a>
     </div>

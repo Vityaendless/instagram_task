@@ -1,6 +1,6 @@
-from django.views.generic import CreateView
+from django.views.generic import CreateView, DetailView
 from django.shortcuts import redirect
-from django.contrib.auth.mixins import PermissionRequiredMixin, UserPassesTestMixin
+from django.contrib.auth.mixins import UserPassesTestMixin
 from ..models import Publication
 from ..forms import PublicationForm, SearchForm
 
@@ -30,3 +30,8 @@ class PublicationCreateView(UserPassesTestMixin, CreateView):
 
     def handle_no_permission(self):
         return redirect('webapp:403')
+
+
+class PublicationView(DetailView):
+    model = Publication
+    template_name = 'publications/details.html'

@@ -8,5 +8,8 @@ class PublicationAdmin(admin.ModelAdmin):
     list_display_links = ['id', 'content']
     list_filter = ['content']
     search_fields = ['content', 'author']
-    fields = ['content', 'author', 'img', 'likes', 'comments', 'created_at', 'updated_at']
+    fields = [
+        'content', 'author', 'img', 'likes_count',
+        'comments_count', 'updated_at', 'created_at'
+    ]
     readonly_fields = ['created_at', 'updated_at']

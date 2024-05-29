@@ -1,2 +1,2 @@
 from .errors import permission_denied
-from .publications import PublicationCreateView
+from .publications import PublicationCreateView, PublicationView
