@@ -21,7 +21,11 @@
                     <a type="button" class="btn btn-light border border-black w-75 py-3 fw-bold" href="{% url 'accounts:user_password_change' request.user.pk %}">Change password</a>
                 {% endif %}
                 {% if request.user.is_authenticated and request.user != user_obj %}
-                    <a type="button" class="btn btn-light border border-black w-75 py-3 fw-bold me-1" href="{% url 'webapp:subscription' pk=user_obj.pk %}">Subscribe</a>
+                    {% if not subscribe %}
+                        <a type="button" class="btn btn-light border border-black w-75 py-3 fw-bold me-1" href="{% url 'webapp:subscription' pk=user_obj.pk %}">Subscribe</a>
+                    {% else %}
+                        <p>You're already subscribe to this user!</p>
+                    {% endif %}
                 {% endif %}
             </div>
             <div class="d-flex justify-content-between mb-2">

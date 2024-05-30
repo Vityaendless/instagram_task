@@ -9,6 +9,7 @@ from django.utils.http import urlencode
 from .auth import EmailUsernameAuthentication as EUA
 from .forms import UserForm
 from webapp.forms import SearchForm
+from webapp.models import Subscription
 
 
 User_model = get_user_model()
@@ -39,15 +40,15 @@ class UserView(DetailView):
     template_name = 'profile.html'
     context_object_name = 'user_obj'
 
-    def dispatch(self, request, *args, **kwargs):
-        if not self.request.user.is_authenticated:
-            return redirect('webapp:403')
-        return super().dispatch(request, *args, **kwargs)
-
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(object_list=object_list, **kwargs)
         context['publications'] = self.object.publications.all()
         context['search_form'] = SearchForm(self.request.GET)
+        if self.request.user.pk != self.kwargs.get('pk'):
+            user_from_profile = User_model.objects.get(pk=self.kwargs.get('pk'))
+            subscribe = Subscription.objects.filter(user=self.request.user, subscriber=user_from_profile)
+            if subscribe:
+                context['subscribe'] = True
         return context
 
 
@@ -55,6 +56,11 @@ class RegisterView(CreateView):
     model = get_user_model()
     form_class = UserForm
     template_name = 'registration.html'
+
+    def dispatch(self, request, *args, **kwargs):
+        if not self.request.user.is_authenticated:
+            return redirect('webapp:403')
+        return super().dispatch(request, *args, **kwargs)
 
     def form_valid(self, form):
         user = form.save()
