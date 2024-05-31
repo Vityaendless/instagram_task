@@ -30,8 +30,8 @@
             </div>
             <div class="d-flex justify-content-between mb-2">
                 <span class="me-1">{{ user_obj.publications_count }} publications</span>
-                <span class="me-1">{{ user_obj.subscriptions_count }} subscriptions</span>
-                <span>{{ user_obj.subscribers_count }} subscribers</span>
+                <a class="me-1" href="{% url 'webapp:subscribitions' pk=user_obj.pk %}">{{ user_obj.subscriptions_count }} subscriptions</a>
+                <a href="{% url 'webapp:subscribers' pk=user_obj.pk %}">{{ user_obj.subscribers_count }} subscribers</a>
             </div>
             <p class="fw-bold">{{ user_obj.last_name }} {{ user_obj.first_name }}</p>
             <p>{{ user_obj.bio }}</p>

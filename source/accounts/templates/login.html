@@ -23,9 +23,21 @@
         <a type="button" class="btn btn-light border border-black w-75 py-3 fw-bold" href="{% url 'accounts:registration' %}">Create new...</a>
     {% endif %}
     {% if request.user.is_authenticated %}
-        <form id="logout-form" method="POST" action="{% url 'accounts:logout' %}?next={{ request.path }}">
+        <form id="logout-form" method="POST" action="{% url 'accounts:logout' %}" class="mb-1">
             {% csrf_token %}
             <button type="submit">Log out</button>
         </form>
+        {% for publication in subscribitions_publications %}
+            <div class="card mb-1">
+                <img src="{{ publication.img.url }}" class="card-img-top" alt="avatar" style="width: 18rem;">
+                <div class="card-body">
+                    <h5 class="card-title">{{ publication.author }}</h5>
+                    <p class="card-text">{{ publication.content }}, {{ publication.created_at }}</p>
+                    <p class="card-text"><small><a href="{% url 'webapp:publication_details' pk=publication.pk %}" class="nav-link">Go to publication...</a></small></p>
+                </div>
+            </div>
+        {% empty %}
+            <p>No publications</p>
+        {% endfor %}
     {% endif %}
 {% endblock %}

@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect, reverse
+from django.shortcuts import render, redirect, reverse, get_object_or_404
 from django.contrib.auth import login, logout, get_user_model
 from django.views.generic import DetailView, CreateView, UpdateView, ListView
 from django.contrib.auth.views import PasswordChangeView
@@ -9,7 +9,7 @@ from django.utils.http import urlencode
 from .auth import EmailUsernameAuthentication as EUA
 from .forms import UserForm
 from webapp.forms import SearchForm
-from webapp.models import Subscription
+from webapp.models import Subscription, Publication
 
 
 User_model = get_user_model()
@@ -18,6 +18,14 @@ User_model = get_user_model()
 def login_view(request):
     context = {}
     context['search_form'] = SearchForm(request.GET)
+    if request.user.is_authenticated:
+        user = get_object_or_404(User_model, pk=request.user.pk)
+        subscribe = Subscription.objects.filter(user=user)
+        if subscribe:
+            subscribitions_pk = []
+            for subscribition in subscribe:
+                subscribitions_pk.append(subscribition.subscriber.pk)
+            context['subscribitions_publications'] = Publication.objects.filter(author__in=subscribitions_pk).order_by('-created_at')
     if request.method == 'POST':
         login_data = request.POST.get('login_data')
         password = request.POST.get('password')
@@ -58,7 +66,7 @@ class RegisterView(CreateView):
     template_name = 'registration.html'
 
     def dispatch(self, request, *args, **kwargs):
-        if not self.request.user.is_authenticated:
+        if self.request.user.is_authenticated:
             return redirect('webapp:403')
         return super().dispatch(request, *args, **kwargs)
 
