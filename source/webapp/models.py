@@ -17,6 +17,14 @@ class Publication(AbstractModel):
     likes_count = models.IntegerField(default=0, verbose_name='Count of likes')
     comments_count = models.IntegerField(default=0, verbose_name='Count of comments')
 
+    def increase_count(self, marker):
+        match marker:
+            case 'likes':
+                self.likes_count += 1
+            case 'comments':
+                self.comments_count += 1
+        self.save()
+
 
 class Subscription(models.Model):
     user = models.ForeignKey(
@@ -24,6 +32,17 @@ class Subscription(models.Model):
         on_delete=models.CASCADE, verbose_name='User'
     )
     subscriber = models.ForeignKey(
-        get_user_model(), related_name='subscriber_user',
+        get_user_model(), related_name='subscriber_users',
         on_delete=models.CASCADE, verbose_name='Subscriber'
+    )
+
+
+class Like(models.Model):
+    user = models.ForeignKey(
+        get_user_model(), related_name='user_publications',
+        on_delete=models.CASCADE, verbose_name='User'
+    )
+    publication = models.ForeignKey(
+        Publication, related_name='publication_users',
+        on_delete=models.CASCADE, verbose_name='Publication'
     )

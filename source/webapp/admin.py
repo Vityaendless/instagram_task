@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Publication, Subscription
+from .models import Publication, Subscription, Like
 
 
 @admin.register(Publication)
@@ -21,3 +21,10 @@ class SubscriptionAdmin(admin.ModelAdmin):
     list_display = ['id']
     list_display_links = ['id']
     fields = ['user', 'subscriber']
+
+
+@admin.register(Like)
+class LikeAdmin(admin.ModelAdmin):
+    list_display = ['id']
+    list_display_links = ['id']
+    fields = ['user', 'publication']
