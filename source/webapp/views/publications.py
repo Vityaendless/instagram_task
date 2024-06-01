@@ -2,7 +2,7 @@ from django.views.generic import CreateView, DetailView
 from django.shortcuts import redirect, get_object_or_404
 from django.contrib.auth.mixins import UserPassesTestMixin
 
-from ..models import Publication, Like
+from ..models import Publication, Like, Comment
 from ..forms import PublicationForm, SearchForm
 
 
@@ -46,4 +46,6 @@ class PublicationView(DetailView):
             context['like'] = False
         else:
             context['like'] = True
+        comments = Comment.objects.filter(publication=publication)
+        context['comments'] = comments
         return context

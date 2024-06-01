@@ -1,0 +1,8 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Add new comment{% endblock %}
+{% block content %}
+    <h1>New comment</h1>
+    {% include 'partial/form.html' with value_submit='Add publication' form_method='post' %}
+{% endblock %}

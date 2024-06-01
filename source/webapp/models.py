@@ -48,9 +48,13 @@ class Like(models.Model):
     )
 
 
-# class Comment(AbstractModel):
-#    publication = models.ForeignKey('webapp.Publication', related_name='comments', on_delete=models.CASCADE, verbose_name='Comment')
-#    text = models.TextField(max_length=400, verbose_name='Comment')
-#    #author = models.CharField(max_length=40, null=True, blank=True, default='Аноним', verbose_name='Автор')
-#    author = models.ForeignKey(get_user_model(), default=1, related_name='comments', on_delete=models.CASCADE,
-#                               verbose_name="Author")
+class Comment(AbstractModel):
+   publication = models.ForeignKey(
+       'webapp.Publication', related_name='comments',
+       on_delete=models.CASCADE, verbose_name='Comment'
+   )
+   text = models.TextField(max_length=400, verbose_name='Comment')
+   author = models.ForeignKey(
+       get_user_model(), related_name='comments',
+       on_delete=models.CASCADE, verbose_name="Author"
+   )

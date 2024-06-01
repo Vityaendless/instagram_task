@@ -1,7 +1,7 @@
 from django import forms
 from django.forms import widgets
 
-from .models import Publication
+from .models import Publication, Comment
 
 
 class SearchForm(forms.Form):
@@ -18,3 +18,9 @@ class PublicationForm(forms.ModelForm):
                 'required': 'Please enter title',
             }
         }
+
+
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model = Comment
+        fields = ('text', )

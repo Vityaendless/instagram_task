@@ -9,6 +9,8 @@ from accounts.views import User_model
 
 class SubscriptionCreateView(View):
     def get(self, request, *args, **kwargs):
+        if not self.request.user.is_authenticated:
+            return redirect('webapp:403')
         user = self.request.user
         subscriber = get_object_or_404(User_model, pk=kwargs.get('pk'))
         subscribe = Subscription.objects.filter(user=user, subscriber=subscriber)

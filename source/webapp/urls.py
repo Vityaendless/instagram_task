@@ -2,7 +2,7 @@ from django.urls import path
 from django.views.generic.base import RedirectView
 
 from .views import (permission_denied, PublicationCreateView, PublicationView, SubscriptionCreateView,
-                    SubscribersListView, SubscribitionsListView, LikeCreateView)
+                    SubscribersListView, SubscribitionsListView, LikeCreateView, CommentCreateView)
 
 
 app_name = 'webapp'
@@ -16,4 +16,5 @@ urlpatterns = [
     path('subscribers/<int:pk>/', SubscribersListView.as_view(), name='subscribers'),
     path('subscribitions/<int:pk>/', SubscribitionsListView.as_view(), name='subscribitions'),
     path('like/<int:pk>/', LikeCreateView.as_view(), name='like'),
+    path('comment/<int:pk>/', CommentCreateView.as_view(), name='new_comment'),
 ]

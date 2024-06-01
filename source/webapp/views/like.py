@@ -6,6 +6,8 @@ from ..models import Publication, Like
 
 class LikeCreateView(View):
     def get(self, request, *args, **kwargs):
+        if not self.request.user.is_authenticated:
+            return redirect('webapp:403')
         user = self.request.user
         publication = get_object_or_404(Publication, pk=kwargs.get('pk'))
         like = Like.objects.filter(user=user, publication=publication)
