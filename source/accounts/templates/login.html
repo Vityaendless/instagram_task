@@ -5,7 +5,7 @@
 {% block content %}
     {% if not request.user.is_authenticated %}
         <h1>Log in</h1>
-        <form class="mb-2" action="{% url 'accounts:login' %}" method="POST">
+        <form class="mb-2" action="{% url 'accounts:login' %}" method="POST" id="loginForm">
             {% csrf_token %}
             {% if has_error %}
                 <p class="form-error">Wrong email/username or password</p>
@@ -40,4 +40,55 @@
             <p>No publications</p>
         {% endfor %}
     {% endif %}
+{% endblock %}
+
+{% block script %}
+    <script>
+        async function makeRequest(url, method='GET', data={}, token=null) {
+            let headers = {
+                "Content-Type": "application/json"
+            };
+            if (token) {
+                headers['Authorization'] = 'Token ' + token;
+            }
+            let body = JSON.stringify(data);
+            let response = await fetch(url, {method, headers, body: JSON.stringify(data)});
+            if (response.ok) {  // нормальный ответ
+                return await response.json();
+            } else {            // ошибка
+                let error = new Error(response.statusText);
+                error.response = response;
+                throw error;
+            }
+        }
+
+        async function onSubmit(e) {
+            e.preventDefault();
+            console.log(e.target);
+            let username = e.target.login_data.value;
+            let password = e.target.password.value;
+            try {
+                let response = await makeRequest(
+                'http://127.0.0.1:8000/api/login/',
+                "POST",
+                {
+                 "username": username,
+                 "password": password
+                 }
+                );
+                console.log(response);
+                localStorage.setItem('apiToken', response.token);
+            } finally {
+                e.target.submit();
+            }
+        }
+
+        async function onLoad() {
+            let loginForm = document.getElementById('loginForm');
+            loginForm.addEventListener('submit', onSubmit);
+
+        }
+
+        window.addEventListener('load', onLoad);
+    </script>
 {% endblock %}
